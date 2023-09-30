@@ -9,10 +9,7 @@
 //     echo $user->user_code;
 // }
 
-
-
 // // dd($p);
-
 ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -35,7 +32,27 @@
 </head>
 
 <body>
-    <h1 class="text-center"> login thành công</h1>
+    <div class="flex flex-col items-center justify-cente mx-auto">
+        <div class=" flex items-end mb-8 text-2xl font-semibold text-gray-900 ml-7 mt-0">
+            <img class="mr-2" src="{{ Vite::asset('resources/images/logo.png') }}" alt="logo">
+            <h1 style="font-size: 43px;">
+                <span class="text-teal-600" style="margin-right: -10px;">I</span>
+                <span class="text-black" style="margin-right: -10px;">-H</span>
+                <span class="text-rose-600" style="margin-right: -10px;">R</span>
+                <span class="text-lime-500">M</span>
+            </h1>
+        </div>
+        <div class="text-gray-500 font-bold text-xl" style="margin-top: -20px">
+            <p class="flex justify-center"><span>Salary Management System</span></p>
+            <p class="flex justify-center"><span>人事薪資管理系統</span></p>
+        </div>
+    </div>
+
+
+    <div class="justify-items-center text-center text-3xl" style="margin-top: 200px;">
+        <a href="/login" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Đến trang đăng
+            nhập</a>
+    </div>
     {{-- <section class="">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 
