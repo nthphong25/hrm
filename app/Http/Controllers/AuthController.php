@@ -30,12 +30,14 @@ class AuthController extends Authenticatable
 
                 // Lấy factory_extcode và dept_name
                 $data = DB::table('ts_user')
-                    ->join('ts_employee', 'ts_user.employee_code', '=', 'ts_employee.employee_code')
-                    ->join('ts_dept', 'ts_employee.dept_code', '=', 'ts_dept.dept_code')
-                    ->join('ts_factory', 'ts_dept.company_code', '=', 'ts_factory.factory_code')
-                    ->select('ts_factory.factory_extcode', 'ts_dept.dept_name')
-                    ->where('ts_user.user_code', $credentials['user_code'])
-                    ->get();
+                ->select('ts_user.user_code', 'ts_dept.dept_code', 'ts_dept.dept_codeupper', 'ts_dept.dept_name', 'ts_factory.factory_code', 'ts_factory.factory_extcode')
+                ->join('ts_employee AS e', 'ts_user.employee_code', '=', 'e.employee_code')
+                ->join('ts_employeedept AS ed', 'e.employee_code', '=', 'ed.employee_code')
+                ->join('ts_dept', 'ed.dept_code', '=', 'ts_dept.dept_code')
+                ->join('ts_factory', 'ts_dept.company_code', '=', 'ts_factory.factory_code')
+                ->where('ts_user.user_code', $credentials['user_code'])
+                ->get();
+
 
                 if ($data->count() > 0) {
                     $message = 'Dang nhap thanh cong tai khoan: ' . $credentials['user_code'] . ', factory_extcode: ' . $data[0]->factory_extcode . ', dept_name: ' . $data[0]->dept_name;
