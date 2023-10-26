@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GetData;
+use App\Http\Controllers\GetDataByMoNo;
+use App\Http\Controllers\pdfController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\DB;
@@ -17,31 +20,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
+Route::post('/get-data', [GetData::class, 'getData']);
+Route::get('/get-data-by-mo-no/{moNo}', [GetDataByMoNo::class, 'getDataByMoNo']);
 
-Route::get('/example', function () {
-    return view('example/index');
-});
+Route::get('/', [pdfController::class, 'index']);
+Route::post('/show', [pdfController::class, 'showChart']);
 
 
-// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-// Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/test-connection', [TestController::class, 'testConnection']);
+
