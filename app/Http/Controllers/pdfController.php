@@ -109,92 +109,30 @@ class pdfController extends Controller
                 ->where('qc_dept_code', $qc_dept_code)
                 ->get();
 
-            // Kiểm tra xem có dữ liệu cho ngày và qc_dept_code này hay không
             if ($data->count() > 0) {
                 $allDataByDayAndDept[$day] = $data;
             }
         }
-        $allTop3MaxValues1 = []; // Khởi tạo mảng để chứa tất cả các giá trị $top3MaxValues1
-
+        // dd($allDataByDayAndDept);
         foreach ($allDataByDayAndDept as $day => $datas) {
-            $dailyTop3MaxValues1 = []; // Khởi tạo mảng để chứa giá trị $top3MaxValues1 của mỗi ngày
 
             foreach ($datas as $index => $items) {
-                $maxValues = [];
-
-                $timeSlot = '07:00-08:00';
-
-                foreach ($error as $label) {
-                    $maxValue = 0;
 
                     $logData20 = json_decode($items->ATQC20_time_log, true);
                     $logData30 = json_decode($items->ATQC30_time_log, true);
                     $logData40 = json_decode($items->ATQC40_time_log, true);
 
-                    $value20 = $logData20[$label][$timeSlot] ?? 0;
-                    $value30 = $logData30[$label][$timeSlot] ?? 0;
-                    $value40 = $logData40[$label][$timeSlot] ?? 0;
-                    $totalValue = $value20 + $value30 + $value40;
-
-                    if ($totalValue >= $maxValue) {
-                        $maxValue = $totalValue;
-                        $maxLabel = $label;
-                    }
-
-                    $maxValues[] = [
-                        'label' => $maxLabel,
-                        'value' => $maxValue,
-                    ];
-                }
-
-                // Lặp qua các label không có trong index_error
-                $allLabels = array_merge($ATQC20, $ATQC30, $ATQC40);
-                $nonErrorLabels = array_diff($allLabels, $error);
-
-                foreach ($nonErrorLabels as $label) {
-                    $maxValue = 0;
-
-                    $logData20 = json_decode($items->ATQC20_time_log, true);
-                    $logData30 = json_decode($items->ATQC30_time_log, true);
-                    $logData40 = json_decode($items->ATQC40_time_log, true);
-
-                    $value20 = $logData20[$label][$timeSlot] ?? 0;
-                    $value30 = $logData30[$label][$timeSlot] ?? 0;
-                    $value40 = $logData40[$label][$timeSlot] ?? 0;
-
-                    $totalValue = $value20 + $value30 + $value40;
-
-                    if ($totalValue >= $maxValue) {
-                        $maxValue = $totalValue;
-                        $maxLabel = $label;
-                    }
-
-                    $maxValues[] = [
-                        'label' => $maxLabel,
-                        'value' => $maxValue,
-                    ];
-                }
-
-                // Sắp xếp mảng $maxValues theo giá trị giảm dần
-                usort($maxValues, function ($a, $b) {
-                    return $b['value'] - $a['value'];
-                });
-
-                $top3MaxValues1 = array_slice($maxValues, 0, 3);
-
-
-
+                    $day = str_replace('-', '_', $day);
+                    $logData20new[$day] = $logData20;
+                    $logData30new[$day] = $logData30;
+                    $logData40new[$day] = $logData40;
+                    $logData20new1[] = $logData20new;
+                    $logData30new1[] = $logData30new;
+                    $logData40new1[] = $logData40new;
             }
-            $day = str_replace('-', '_', $day);
-            $allTop3MaxValues1[$day] = $top3MaxValues1;
-            $logData20new[$day] = $logData20;
-            $logData30new[$day] = $logData30;
-            $logData40new[$day] = $logData40;
-
         }
+        // dd($logData20new1);
 
-        // dd($allTop3MaxValues1);
-        return view('show', compact('allDataByDayAndDept', 'timeline', 'allTop3MaxValues1', 'logData20new', 'logData30new', 'logData40new'));
-
+        return view('show', compact('allDataByDayAndDept', 'timeline', 'logData20new1', 'logData30new1', 'logData40new1', 'selectedGL'));
     }
 }
